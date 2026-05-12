@@ -85,7 +85,7 @@ def build_app(cfg: dict) -> FastAPI:
                 recent = [
                     {"market_type": iv.market_type, "cleared_price": iv.cleared_price}
                     for iv in scheduler.get_dispatched_intervals(
-                        datetime.now(timezone.utc) - __import__("datetime").timedelta(hours=2)
+                        datetime.now(timezone.utc) - timedelta(hours=2)
                     )
                     if iv.cleared_price is not None
                 ][-20:]

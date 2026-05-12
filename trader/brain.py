@@ -23,7 +23,6 @@ class Brain(ABC):
         self,
         recommendation: Recommendation | None,
         battery: Battery,
-        interval: MarketInterval,
         interval_hours: float,
     ) -> tuple[str, float, float]:  # (direction, volume_mw, limit_price)
         ...
@@ -78,7 +77,6 @@ class DefaultTraderBrain(Brain):
         self,
         recommendation: Recommendation | None,
         battery: Battery,
-        interval: MarketInterval,
         interval_hours: float,
     ) -> tuple[str, float, float]:
         if recommendation is None or recommendation.direction == "none":

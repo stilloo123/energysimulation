@@ -95,7 +95,6 @@ def build_app(cfg: dict) -> FastAPI:
 
                         # Skip if bid window is closing — not enough time for recommendation
                         try:
-                            from datetime import datetime, timezone
                             bid_close = datetime.fromisoformat(iv_data["bid_close_at"])
                             if bid_close.tzinfo is None:
                                 bid_close = bid_close.replace(tzinfo=timezone.utc)
@@ -142,7 +141,7 @@ def build_app(cfg: dict) -> FastAPI:
                         iv_minutes = interval_minutes
                         iv_hours = iv_minutes / 60.0
                         direction, volume, limit_price = brain.decide_bid(
-                            recommendation, battery, None, iv_hours
+                            recommendation, battery, iv_hours
                         )
 
                         if direction == "none":

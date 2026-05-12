@@ -243,8 +243,7 @@ def build_app(cfg: dict) -> FastAPI:
             try:
                 t = datetime.fromisoformat(iv.get("dispatch_at", ""))
                 if t.tzinfo is None:
-                    from datetime import timezone as tz
-                    t = t.replace(tzinfo=tz.utc)
+                    t = t.replace(tzinfo=timezone.utc)
                 secs = int((t - now).total_seconds())
                 return "dispatching..." if secs < 0 else f"{secs}s"
             except Exception:
