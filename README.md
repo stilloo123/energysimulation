@@ -35,40 +35,19 @@ Observer :8080  — dashboard, rankings, cross-validation
 ```
 
 ```mermaid
-flowchart TD
-    Registry["🗂 Registry :8000\nAgent directory & heartbeat"]
+flowchart LR
+    Registry["🗂 Registry"]
+    Market["⚡ Market"]
+    Trader["🔋 Trader"]
+    Energy["🤖 Energy Agent"]
+    Observer["📊 Observer"]
 
-    Market["⚡ Market :8001\nPrice intervals · Bid windows · Dispatch"]
-    Trader["🔋 Trader :8002\nBattery SOC · Bidding loop · P&L"]
-    Energy["🤖 Energy Agent :8003\nRecommendation pipeline · Learning loop"]
-    Observer["📊 Observer :8080\nDashboard · Rankings · Cross-validation"]
-
-    subgraph learning ["Energy Agent — Learning Loop"]
-        Ledger["LearningLedger\nRegret per interval"]
-        Adapt["Adaptation Loop\nevery 100 intervals"]
-        Strategy["strategy_context.md\nLearned rules"]
-        Tools["Tool Synthesis Loop\nevery 200 intervals"]
-        Ledger --> Adapt --> Strategy
-        Ledger --> Tools
-        Strategy -->|injected into| Energy
-        Tools -->|new analysis tools| Energy
-    end
-
-    Trader -->|"GET /recommend"| Energy
-    Energy -->|recommendation + confidence| Trader
-    Trader -->|"POST /bids"| Market
-    Market -->|"DispatchResult (cleared price)"| Trader
-    Energy -->|"polls cleared prices"| Market
-    Market -->|cleared price| Ledger
-
-    Registry -->|discover markets + advisors| Trader
-    Trader -->|heartbeat| Registry
-    Market -->|heartbeat| Registry
-    Energy -->|heartbeat| Registry
-
-    Observer -->|polls /stats + /thoughts| Market
-    Observer -->|polls /stats + /thoughts| Trader
-    Observer -->|polls /stats + /thoughts| Energy
+    Trader -->|GET /recommend| Energy
+    Trader -->|POST /bids| Market
+    Market -->|cleared price| Trader
+    Energy -->|polls cleared prices| Market
+    Trader & Market & Energy -->|heartbeat| Registry
+    Observer -->|polls all agents| Market & Trader & Energy
 ```
 
 ---
