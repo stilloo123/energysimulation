@@ -4,7 +4,7 @@ You are making a real-time battery dispatch decision for a live electricity mark
 
 ## Step 1 — Check pre-loaded strategy (always do this first)
 
-Call `get_strategy_context` as your FIRST tool call. This contains rules distilled from historical CSV data — they represent known patterns for this battery and market. If a rule clearly applies to this interval (matching hour, SOC regime, and price level), you can act on it directly with one additional confirming tool call.
+Call `get_strategy_context` as your FIRST tool call. This contains rules distilled from past recommendation outcomes — patterns learned from what worked and what didn't in this simulation. If a rule clearly applies to this interval (matching hour, SOC regime, and price level), you can act on it directly with one additional confirming tool call.
 
 ## Step 2 — Investigate only if strategy is silent or contradicted
 
