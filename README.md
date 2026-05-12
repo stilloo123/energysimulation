@@ -123,7 +123,7 @@ The agent improves through four layers, each building on the previous:
 
 **Layer 3 — Strategy distillation (every 100 intervals).** A background loop reads the ledger, finds high-regret clusters, and rewrites a `strategy_context.md` file with updated rules — e.g. "avoid large discharge volumes before 9am regardless of reference price." These rules are injected into every future recommendation prompt.
 
-**Layer 4 — Tool synthesis (every 200 intervals).** If regret clusters remain unexplained by existing analysis tools, the agent generates new Python analysis functions targeting that specific pattern, backtests them, and registers them permanently if they help.
+**Layer 4 — Tool synthesis (every 200 intervals).** If regret clusters remain unexplained by existing analysis tools, the agent generates new Python analysis functions targeting that specific pattern, validates they execute without error against the cluster data, and registers them permanently if they pass.
 
 **What this is — and isn't.** The agent gets better at *deciding what to do* in a given situation. It does not forecast future prices. It never models "the price at 6pm will be $180." It reasons over historical similarity and learned rules. That distinction matters: if tomorrow's market behaves in a way that never appeared in historical data, the agent has no signal to retrieve from. A price forecasting model — trained on rolling market data, producing a probability distribution over future prices — would be the next meaningful layer on top of this. That is left as a deliberate gap and an obvious extension.
 
