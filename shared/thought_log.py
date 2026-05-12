@@ -10,6 +10,7 @@ class ThoughtLog:
         log_path.mkdir(exist_ok=True)
         safe_name = re.sub(r"[^a-z0-9_-]", "_", agent_name.lower()) or "agent"
         self._path = log_path / f"{safe_name}.jsonl"
+        self._path.write_text("")  # clear on startup
 
     def write(self, event_type: str, reasoning: str, data: dict | None = None) -> None:
         entry = {
