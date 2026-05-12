@@ -1,0 +1,19 @@
+name: "Battery Trader Alpha"
+model: "anthropic/claude-sonnet-4-6"
+agents_md: "trader/AGENTS.md"
+port: 8002
+registry_urls:
+  - "http://localhost:8000"
+seed_balance: 100000.0
+battery:
+  capacity_mwh: 100.0
+  max_charge_mw: 50.0
+  max_discharge_mw: 50.0
+  initial_soc_pct: 0.5
+  efficiency: 0.85
+bid_delay_seconds: 5
+discovery_interval_seconds: 60
+settlement_poll_seconds: 10
+min_energy_agent_intervals: 5
+min_recommendation_seconds: 20
+regret_switch_threshold: 500.0

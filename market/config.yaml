@@ -1,0 +1,17 @@
+name: "NEM Spot Market"
+csv_path: "/Users/sachin/projects/energyproject/data/BLYTHB1_20260126.csv"
+model: "anthropic/claude-sonnet-4-6"
+agents_md: "market/AGENTS.md"
+seed_balance: 0.0
+port: 8001
+registry_urls:
+  - "http://localhost:8000"
+interval_minutes: 5
+time_multiplier: 5.0
+bid_window_pct: 0.6
+lookahead_intervals: 6
+grid_capacity_mw: 500.0
+market_types:
+  - energy
+  - fcas_raise
+  - fcas_lower

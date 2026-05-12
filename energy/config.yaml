@@ -1,0 +1,15 @@
+name: "Energy Advisor Alpha"
+specialization: "balanced"
+model: "anthropic/claude-sonnet-4-6"
+judge_model: "anthropic/claude-haiku-4-5-20251001"
+agents_md: "energy/AGENTS.md"
+csv_path: "/Users/sachin/projects/energyproject/data/BLYTHB1_20260126.csv"
+port: 8003
+registry_urls:
+  - "http://localhost:8000"
+min_recommendation_seconds: 10
+max_investigator_iterations: 4
+seed_balance: 0.0
+result_ingestion_interval: 30
+adaptation_interval_intervals: 100
+tool_synthesis_interval_intervals: 200
