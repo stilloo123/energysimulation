@@ -22,7 +22,7 @@ Determine ONE of:
 
 ## Rules
 
-1. Always call `get_strategy_context` first — one call costs nothing; skipping wastes the pre-loaded knowledge.
+1. Always call `get_strategy_context` first — skipping wastes pre-loaded knowledge and burns a tool call on raw data you already have summarised.
 2. Maximum 4 tool calls total — this is time-sensitive.
 3. The reference_price is the PRE-DISPATCH forecast, not the cleared price. The actual cleared price may differ.
 4. If strategy context is clear and conditions match, 2 tool calls is enough.
