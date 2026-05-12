@@ -16,7 +16,7 @@ This simulation pits an AI advisor against that problem in real time:
 2. The **Trader** manages a 100MWh battery with hard physical constraints (SOC limits, charge/discharge rates). Before each interval it asks the Energy Agent for a recommendation.
 3. The **Energy Agent** runs an investigation pipeline — querying market history, checking its learned strategy rules, finding similar past intervals — then recommends a direction (charge/discharge), volume, and limit price with a confidence score.
 4. A **hard gate** ensures every recommendation is grounded in tool evidence. An ungrounded recommendation returns `direction=none` rather than risk a bad bid.
-5. A **soft gate** (second LLM acting as judge) scores recommendation quality and downgrades confidence if low. The Trader scales volume down on low-confidence recommendations.
+5. A **soft gate** (second LLM acting as judge) scores recommendation quality asynchronously after the recommendation is returned. Results are logged and feed into future strategy context — they do not block the current bid.
 6. After each interval dispatches, the Energy Agent computes **regret** — how much revenue was left on the table vs. perfect foresight — and stores it in its learning ledger.
 7. Every 100 intervals, an **adaptation loop** distills the ledger into updated strategy rules. Every 200 intervals, a **tool synthesis loop** generates new analysis functions targeting unexplained regret patterns.
 

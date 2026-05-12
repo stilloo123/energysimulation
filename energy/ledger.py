@@ -46,26 +46,27 @@ class LearningLedger:
         record = self._records[rec_id]
         rec = record.recommendation
 
-        # Perfect foresight: always discharge at cleared price for this interval
-        perfect = rec.volume_mw * _INTERVAL_HOURS * cleared_price
-
-        # Revenue if the recommendation had been followed exactly
+        # Perfect foresight: best possible outcome in the recommended direction
         if rec.direction == "discharge":
+            perfect = rec.volume_mw * _INTERVAL_HOURS * cleared_price
             revenue_if_followed = (
                 rec.volume_mw * _INTERVAL_HOURS * cleared_price
                 if cleared_price >= rec.limit_price
                 else 0.0
             )
         elif rec.direction == "charge":
+            # Perfect charge: always charged at cleared price
+            perfect = -(rec.volume_mw * _INTERVAL_HOURS * cleared_price)
             revenue_if_followed = (
                 -(rec.volume_mw * _INTERVAL_HOURS * cleared_price)
                 if cleared_price <= rec.limit_price
                 else 0.0
             )
         else:
+            perfect = 0.0
             revenue_if_followed = 0.0
 
-        rec_regret = perfect - revenue_if_followed
+        rec_regret = max(0.0, perfect - revenue_if_followed)
 
         self._records[rec_id] = record.model_copy(
             update={
