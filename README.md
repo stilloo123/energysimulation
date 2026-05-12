@@ -50,7 +50,7 @@ Observer :8080  — dashboard, rankings, cross-validation
 
 ![Energy Simulation Dashboard](assets/dashboard.png)
 
-The screenshot above was captured roughly 20 minutes into a run using real Australian NEM price data from 26 January 2026 — a day with an extreme evening price spike.
+The screenshot above was captured roughly 20 minutes into a run using synthetically generated market prices that simulate realistic electricity market conditions, including off-peak lows and evening demand spikes.
 
 **What you're looking at:**
 
