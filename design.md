@@ -322,7 +322,7 @@ Market: returns DispatchResult once dispatched, or {status: "pending"}
 
 ### Recommendation flow (Trader → Energy agent)
 ```
-Trader: GET /recommend?interval_id=X&battery_state=<json>
+Trader: GET /recommend?interval_id=X&battery_state=<json>&market_url=<url>
 Energy: runs investigation pipeline (max 4 tool calls, ~20-30s)
       → narrator: structured output → Recommendation
       → hard gate: all evidence_tool_calls grounded?
@@ -361,7 +361,7 @@ Energy agent result_ingestion_loop (every 30s):
 |---|---|---|
 | `heartbeat_loop` | 60s | Re-register with registry |
 | `discovery_loop` | 60s | Fetch all markets + energy agents from registry |
-| `bidding_loop` | 30s | For each open interval not yet bid: get recommendation → decide → bid |
+| `bidding_loop` | 5s | For each open interval not yet bid: get recommendation → decide → bid |
 | `settlement_loop` | 10s | Poll pending bid results, update battery SOC + ledger |
 
 ### Energy Agent
@@ -440,7 +440,7 @@ PerformanceRecord:
     confidence_accuracy: float
     last_queried_at: datetime
 ```
-Trader brain method `select_energy_agent(available, performance, battery_state)` chooses which to query. Default: stick with current unless rolling regret exceeds threshold for 10 consecutive intervals, then switch to best available.
+Trader brain method `select_energy_agent(available, performance, battery_state, current_agent_url)` chooses which to query. Default: stick with current unless rolling regret exceeds threshold for 10 consecutive intervals, then switch to best available.
 
 ### Observer cross-validation
 Energy agents self-report `avg_rec_regret` in their AgentCard. The Observer tracks actual trader outcomes per advisor and flags discrepancies:
