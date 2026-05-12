@@ -1,5 +1,5 @@
 name: "NEM Spot Market"
-csv_path: "/Users/sachin/projects/energyproject/data/BLYTHB1_20260126.csv"
+# csv_path: ""  # optional: path to NEM dispatch CSV; omit to use LLM-generated prices
 model: "anthropic/claude-sonnet-4-6"
 agents_md: "market/AGENTS.md"
 seed_balance: 0.0

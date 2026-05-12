@@ -30,6 +30,8 @@ def load_config(path: str = "energy/config.yaml") -> dict:
         cfg["specialization"] = os.environ["ENERGY_SPECIALIZATION"]
     if "ENERGY_MODEL" in os.environ:
         cfg["model"] = os.environ["ENERGY_MODEL"]
+    if "CSV_PATH" in os.environ:
+        cfg["csv_path"] = os.environ["CSV_PATH"]
     return cfg
 
 

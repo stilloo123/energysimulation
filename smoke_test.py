@@ -42,7 +42,8 @@ def check(name: str, fn):
 # ---------------------------------------------------------------------------
 print("\n── CSV + Nightly Analysis ──")
 
-CSV_PATH = "/Users/sachin/projects/energyproject/data/BLYTHB1_20260126.csv"
+import os
+CSV_PATH = os.environ.get("CSV_PATH", "")
 
 
 def test_csv_load():

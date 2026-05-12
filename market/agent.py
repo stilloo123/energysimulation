@@ -31,6 +31,8 @@ def load_config(path: str = "market/config.yaml") -> dict:
         cfg["port"] = int(os.environ["MARKET_PORT"])
     if "MARKET_NAME" in os.environ:
         cfg["name"] = os.environ["MARKET_NAME"]
+    if "CSV_PATH" in os.environ:
+        cfg["csv_path"] = os.environ["CSV_PATH"]
     return cfg
 
 

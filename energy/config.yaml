@@ -3,7 +3,7 @@ specialization: "balanced"
 model: "anthropic/claude-sonnet-4-6"
 judge_model: "anthropic/claude-haiku-4-5-20251001"
 agents_md: "energy/AGENTS.md"
-csv_path: "/Users/sachin/projects/energyproject/data/BLYTHB1_20260126.csv"
+# csv_path: ""  # optional: path to NEM dispatch CSV for price replay
 port: 8003
 registry_urls:
   - "http://localhost:8000"
