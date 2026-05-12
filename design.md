@@ -51,7 +51,7 @@ Multiple Energy agents can be hosted by different people and compete on recommen
 ## Agent Roles
 
 ### Registry (port 8000)
-Stateless FastAPI directory. Agents register on startup and heartbeat every 60s. Registry evicts stale entries after 180s (3 missed beats). Exposes `/casinos` → no, here: `/markets`, `/traders`, `/energy`, `/agents`. No game data, no market data — just URLs and agent metadata.
+Stateless FastAPI directory. Agents register on startup and heartbeat every 60s. Registry evicts stale entries after 180s (3 missed beats). Exposes `/markets`, `/traders`, `/energy`, `/observers`, `/agents`. No market data — just URLs and agent metadata.
 
 ### Market (port 8001)
 Simulates an electricity spot market and FCAS (Frequency Control Ancillary Services) market. Responsibilities:
@@ -79,7 +79,7 @@ Manages a battery asset with physical constraints. Responsibilities:
 ### Energy Agent (port 8003+, multiple instances)
 Real-time intelligent advisor. Responsibilities:
 - Exposes `GET /recommend` — Trader queries before each bid decision
-- Runs a Strands-based investigation pipeline (ported from energyproject) against live market history
+- Runs a tool-use investigation pipeline against live market history
 - Hard gate: recommendation must be grounded in tool evidence — ungrounded recommendations return `direction="none"`
 - Soft gate (judge): scores recommendation quality, downgrades confidence if low
 - Bid-window deadline guard: if `time_to_bid_close < min_recommendation_seconds`, return `direction="none"` immediately
@@ -139,7 +139,7 @@ energysimulation/
 │   ├── ledger.py          # LearningLedger (RecommendationRecords + regret)
 │   ├── adaptation.py      # AdaptationLoop + ToolSynthesisLoop
 │   ├── retrieval.py       # similar-situation lookup from LearningLedger
-│   ├── tools.py           # static tool registry + generated tool loader
+│   ├── tool_registry.py   # static tool registry + generated tool loader
 │   ├── tools/
 │   │   └── generated/     # dynamically generated tools land here
 │   ├── analysis/
@@ -163,6 +163,12 @@ energysimulation/
 │   └── config.yaml
 │
 ├── requirements.txt
+├── start.sh
+├── stop.sh
+├── smoke_test.py
+├── .env.sample
+├── assets/
+│   └── dashboard.png
 └── CLAUDE.md
 ```
 
@@ -296,7 +302,7 @@ POST /register  {url, name, type}
 ### Interval lifecycle (Market-driven)
 ```
 scheduler creates interval → status: "scheduled"
-bet_open_at reached        → status: "open"   (appears in Market AgentCard)
+bid_open_at reached        → status: "open"   (appears in Market AgentCard)
 bid_close_at reached       → status: "closed" (no new bids accepted)
 dispatch_at reached        → Market generates cleared_price
                            → status: "dispatched"
@@ -405,13 +411,13 @@ Before recommending, the Brain calls this tool and gets real examples of what wo
 `tool_synthesis_loop` runs every 200 intervals:
 1. Find the largest unexplained regret cluster (high regret, no existing tool covers the pattern)
 2. Ask the Brain to write a new Python analysis function targeting that pattern
-3. Backtest the new tool against the last 200 LearningLedger records
-4. If it would have reduced rec_regret significantly: write to `energy/tools/generated/{name}.py`, register in tool registry
+3. Validate the new tool executes without error against the cluster data
+4. If it passes: write to `energy/tools/generated/{name}.py`, register in tool registry
 5. Log the synthesis event with before/after regret estimate
 
 The judge and hard gate prevent synthesised tools from inflating scores — every recommendation still requires grounded evidence.
 
-### Quality gates on recommendations (adapted from energyproject)
+### Quality gates on recommendations
 | Gate | Type | Action on failure |
 |---|---|---|
 | Hard gate | Mechanical: evidence_tool_calls grounded? | Return `direction="none"` — don't risk ungrounded bid |
@@ -460,6 +466,6 @@ Energy agents self-report `avg_rec_regret` in their AgentCard. The Observer trac
 - Hard gate failure always returns `direction="none"` — never send an ungrounded bid recommendation
 - `result_ingestion_loop` on the Energy agent pulls from Market directly — does not require Trader feedback
 - `Brain` is the only thing that should be subclassed per agent — all other components are plumbing
-- Simulation time is configurable via `time_multiplier` in market config (1.0 = real-time 5-min intervals, 10.0 = 30s intervals)
+- Simulation time is configurable via `time_multiplier` in market config (1.0 = real-time 5-min intervals, 5.0 = 60s intervals)
 - Observer cross-validates Energy agent self-reported metrics — trust but verify
 - No cryptographic primitives anywhere — this is a cooperative simulation
