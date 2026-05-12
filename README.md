@@ -12,7 +12,7 @@ Batteries in electricity markets make money by buying cheap (charging during off
 
 This simulation pits an AI advisor against that problem in real time:
 
-1. The **Market** generates realistic price intervals drawn from real Australian NEM data, opening bid windows every few minutes.
+1. The **Market** generates realistic price intervals simulating electricity market conditions, opening bid windows every few minutes.
 2. The **Trader** manages a 100MWh battery with hard physical constraints (SOC limits, charge/discharge rates). Before each interval it asks the Energy Agent for a recommendation.
 3. The **Energy Agent** runs an investigation pipeline — querying market history, checking its learned strategy rules, finding similar past intervals — then recommends a direction (charge/discharge), volume, and limit price with a confidence score.
 4. A **hard gate** ensures every recommendation is grounded in tool evidence. An ungrounded recommendation returns `direction=none` rather than risk a bad bid.
@@ -56,7 +56,7 @@ The screenshot above was captured roughly 20 minutes into a run using synthetica
 
 - **$3,748 net P&L / 8.3 MWh traded.** The battery has discharged profitably into the evening price spike. Revenue starts near zero (or negative, while charging is paid for) and climbs as dispatched intervals are settled.
 
-- **Evening price spike — $8,929/MWh.** The Live Feed shows a `Price revealed` event at $8,929/MWh. This is a real NEM price from that date — a demand-driven spike where the market briefly cleared at nearly 9× the normal cap. The battery discharged into this interval, which is where most of the P&L was earned.
+- **Evening price spike — $8,929/MWh.** The Live Feed shows a `Price revealed` event at $8,929/MWh. This reflects a simulated demand-driven spike where the market briefly cleared at nearly 9× the normal cap. The battery discharged into this interval, which is where most of the P&L was earned.
 
 - **`RECENT_COMPUTED` events in the Live Feed.** These are the Energy Agent's learning loop firing — it detected a cluster of high-regret intervals and recomputed its strategy context. The updated rules get injected into every subsequent recommendation prompt.
 
