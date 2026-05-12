@@ -50,7 +50,7 @@ Observer :8080  — dashboard, rankings, cross-validation
 
 ![Energy Simulation Dashboard](assets/dashboard.png)
 
-The screenshot above was captured roughly 20 minutes into a run using synthetically generated market prices that simulate realistic electricity market conditions, including off-peak lows and evening demand spikes.
+Sample screenshot from a running simulation.
 
 **What you're looking at:**
 
